@@ -139,6 +139,9 @@ public class BuildingDetailFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                                   // bitmap.scale (i.getWidth());
+                                    bitmap.setHeight(500);
                                     i.setImageBitmap(bitmap);
                                     i.setOnClickListener(new DisplayFullImageOnClickListener(bitmap));
                                     i.invalidate();
