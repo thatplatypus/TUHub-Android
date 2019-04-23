@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:10.2.1'
     implementation 'com.yelp.clientlib:yelp-android:3.0.0'
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
+    implementation "commons-io:commons-io:+"
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'com.google.auto.value:auto-value:1.2'

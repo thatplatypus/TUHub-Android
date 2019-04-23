@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -17,11 +18,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 
 import edu.temple.tuhub.models.Address;
@@ -131,8 +137,10 @@ public class BuildingDetailFragment extends Fragment {
             @Override
             public void run() {
                     try {
-                           ImageURL = "https://maps.googleapis.com/maps/api/streetview?size=592x333&location="+latitude+","+longitude+"&key="+getString(R.string.google_android_map_api_key);
+                           ImageURL = "https://maps.googleapis.com/maps/api/streetview?size=1218x600&location="+latitude+","+longitude+"&key="+getString(R.string.google_android_map_api_key);
+                        System.out.println(ImageURL);
                             bitmap = BitmapFactory.decodeStream((InputStream) new URL(ImageURL).getContent());
+
                             if (getActivity() == null) {
                                 return;
                             }
@@ -141,7 +149,7 @@ public class BuildingDetailFragment extends Fragment {
                                 public void run() {
                                     bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                                    // bitmap.scale (i.getWidth());
-                                    bitmap.setHeight(500);
+                                    //bitmap.setHeight(500);
                                     i.setImageBitmap(bitmap);
                                     i.setOnClickListener(new DisplayFullImageOnClickListener(bitmap));
                                     i.invalidate();
@@ -153,6 +161,19 @@ public class BuildingDetailFragment extends Fragment {
             }
         };
         t.start();
+    }
+
+    private Bitmap decodeFile(File f){
+        try {
+            //decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inMutable = true;
+            o.inScaled = true;
+            o.outWidth = 600;
+            o.outHeight = 400;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+        } catch (FileNotFoundException e) {}
+        return null;
     }
 
     /*

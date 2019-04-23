@@ -16,7 +16,7 @@
         android:textSize="30sp"/>
 
     <View
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="6dp"
         android:background="#990033"/>
@@ -26,10 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:scaleType="fitXY"
         android:src="@drawable/no_photo"/>
 
     <View
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="6dp"
         android:background="#990033"/>
