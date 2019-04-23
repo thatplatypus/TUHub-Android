@@ -95,7 +95,7 @@ public class FoodTruck implements Serializable {
 
     public static void retrieveFoodTrucks(final Double nwLat, final Double seLat, final Double nwLong, final Double seLong, final FoodTruckRequestListener foodTruckRequestListener) {
 
-        YelpAPI a = new YelpAPIFactory(apikey)
+        //YelpAPI a = new YelpAPIFactory(apikey)
         YelpAPIFactory apiFactory = new YelpAPIFactory(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
         YelpAPI yelpAPI = apiFactory.createAPI();
 
