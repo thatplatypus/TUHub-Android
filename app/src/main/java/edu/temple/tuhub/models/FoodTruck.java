@@ -10,6 +10,7 @@ import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.BoundingBoxOptions;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
+import com.yelp.clientlib.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class FoodTruck implements Serializable {
     private static final String CONSUMER_SECRET = "FUFyMzXh_FE9ZdxsLaWbyxyaQto";
     private static final String TOKEN = "cwiEOUMlecclHHj2mPvk-bFcxZ5OW394";
     private static final String TOKEN_SECRET = "mDKbu3OKIbPmOYjz-UNqX-GrTnA";
+    private static final String API_KEY = "3DA1mH3XOdvOFFY5etHkVJKxexAZ7niQszSLiMM1MmJyRlLeKKmiXw3esb_yuMvoSsgcOS5cccFU0xl4o3Pl67h6dPoMa-0W_crezqWoMXu8RK4XRoqmN2S9xXa-XHYx";
 
     private String name;
     private String rating;
@@ -93,8 +95,10 @@ public class FoodTruck implements Serializable {
 
     public static void retrieveFoodTrucks(final Double nwLat, final Double seLat, final Double nwLong, final Double seLong, final FoodTruckRequestListener foodTruckRequestListener) {
 
+        YelpAPI a = new YelpAPIFactory(apikey)
         YelpAPIFactory apiFactory = new YelpAPIFactory(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
         YelpAPI yelpAPI = apiFactory.createAPI();
+
         Map<String, String> params = new HashMap<>();
 
         // general params
@@ -126,7 +130,6 @@ public class FoodTruck implements Serializable {
         };
 
         Call<SearchResponse> call = yelpAPI.search(bo, params);
-
         Callback<SearchResponse> callback = new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
