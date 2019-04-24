@@ -84,7 +84,7 @@ public class FoodTruck implements Serializable {
         OkHttpClient client = new OkHttpClient();
 
 
-        String term = "food";                       // term
+        String term = DEFAULT_TERM;                       // term
         Double latitude = (seLat+nwLat)/2;
         Double longitude = (nwLong+seLong)/2;
 
