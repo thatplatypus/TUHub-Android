@@ -184,11 +184,11 @@ public class MapsFragment extends Fragment {
                     activity.loadBuildingDetails(Building.getName(), Building.getImageUrl(), Building.getLatitude(), Building.getLongitude());
                 }
             }
-            /*for (edu.temple.tuhub.models.FoodTruck FoodTruck : FoodTrucks) {
+            for (edu.temple.tuhub.models.FoodTruck FoodTruck : FoodTrucks) {
                 if (FoodTruck.getName().equals(currentMarker.getTitle())) {
                     activity2.loadFoodTruckDetails(FoodTruck.getName(), FoodTruck.getRating(), FoodTruck.getIsClosed(), FoodTruck.getLatitude(), FoodTruck.getLongitude(), FoodTruck.getImageURL(), FoodTruck.getPhone());
                 }
-            }*/
+            }
         }
     }
 

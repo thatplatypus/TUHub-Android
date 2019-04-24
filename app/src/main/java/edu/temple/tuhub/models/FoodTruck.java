@@ -3,9 +3,12 @@ package edu.temple.tuhub.models;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import com.androidnetworking.error.ANError;
+import com.yelp.clientlib.entities.Business;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import edu.temple.tuhub.R;
 import okhttp3.OkHttpClient;
@@ -101,7 +104,20 @@ public class FoodTruck implements Serializable {
 
             JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
             JSONArray myResponse = (JSONArray)jsonObject.get("businesses");
-            System.out.println(myResponse.getJSONObject(0).getString("name"));
+            FoodTruck[] foodTrucks = new FoodTruck[myResponse.length()];
+            for (int i=0; i < myResponse.length(); i++) {
+                JSONObject o = myResponse.getJSONObject(i);
+                foodTrucks[i] = new FoodTruck(
+                        o.getString("name"),
+                        o.getString("rating"),
+                        o.getString("is_closed"),
+                        o.getJSONObject("coordinates").getString("longitude"),
+                        o.getJSONObject("coordinates").getString("latitude"),
+                        o.getString("image_url"),
+                        o.getString("phone"));
+            }
+
+            foodTruckRequestListener.onResponse(foodTrucks);
 
         } catch (Exception e) {
             System.out.println("REQUEST FAILED");
