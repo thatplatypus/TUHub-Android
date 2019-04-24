@@ -1,29 +1,17 @@
 package edu.temple.tuhub.models;
 
+import android.content.res.Resources;
 import android.support.annotation.Nullable;
-
 import com.androidnetworking.error.ANError;
-import com.google.android.gms.maps.model.LatLng;
-import com.yelp.clientlib.connection.YelpAPI;
-import com.yelp.clientlib.connection.YelpAPIFactory;
-import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.SearchResponse;
-import com.yelp.clientlib.entities.options.BoundingBoxOptions;
-import com.yelp.clientlib.entities.options.CoordinateOptions;
-import com.yelp.clientlib.*;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-/**
- * Created by laurenlezberg on 4/17/17.
- */
+import edu.temple.tuhub.R;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import edu.temple.tuhub.R;
 
 public class FoodTruck implements Serializable {
 
@@ -37,11 +25,7 @@ public class FoodTruck implements Serializable {
     private static final String DEFAULT_LOCATION = "Temple University, Philadelphia, PA";
     private static final String SEARCH_LIMIT = "25";
 
-    private static final String CONSUMER_KEY = "p9eiiQKJqloSQvFa8A3a0A";
-    private static final String CONSUMER_SECRET = "FUFyMzXh_FE9ZdxsLaWbyxyaQto";
-    private static final String TOKEN = "cwiEOUMlecclHHj2mPvk-bFcxZ5OW394";
-    private static final String TOKEN_SECRET = "mDKbu3OKIbPmOYjz-UNqX-GrTnA";
-    private static final String API_KEY = "3DA1mH3XOdvOFFY5etHkVJKxexAZ7niQszSLiMM1MmJyRlLeKKmiXw3esb_yuMvoSsgcOS5cccFU0xl4o3Pl67h6dPoMa-0W_crezqWoMXu8RK4XRoqmN2S9xXa-XHYx";
+    private static final String API_KEY = Yelp.API_KEY;
 
     private String name;
     private String rating;
@@ -95,7 +79,39 @@ public class FoodTruck implements Serializable {
 
     public static void retrieveFoodTrucks(final Double nwLat, final Double seLat, final Double nwLong, final Double seLong, final FoodTruckRequestListener foodTruckRequestListener) {
 
-        //YelpAPI a = new YelpAPIFactory(apikey)
+
+        // GET /businesses/search
+        OkHttpClient client = new OkHttpClient();
+
+
+        String term = "food";                       // term
+        Double latitude = (seLat+nwLat)/2;
+        Double longitude = (nwLong+seLong)/2;
+
+
+        Request request = new Request.Builder()
+                .url("https://api.yelp.com/v3/businesses/search?term=" + term + "&latitude=" + latitude + "&longitude=" + longitude + "")
+                .get()
+                .addHeader("authorization", "Bearer"+" "+API_KEY)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+
+            JSONObject jsonObject = new JSONObject(response.body().string().trim());       // parser
+            JSONArray myResponse = (JSONArray)jsonObject.get("businesses");
+            System.out.println(myResponse.getJSONObject(0).getString("name"));
+
+        } catch (Exception e) {
+            System.out.println("REQUEST FAILED");
+            e.printStackTrace();
+        }
+
+    }
+
+
+        /*
         YelpAPIFactory apiFactory = new YelpAPIFactory(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
         YelpAPI yelpAPI = apiFactory.createAPI();
 
@@ -125,7 +141,7 @@ public class FoodTruck implements Serializable {
 
             @Override
             public Double neLongitude() {
-                return seLong;
+                return seLong/;
             }
         };
 
@@ -160,7 +176,8 @@ public class FoodTruck implements Serializable {
         };
 
         call.enqueue(callback);
-    }
+        */
+
 
     /*
     The Yelp API provides the URL of a thumbnail pic; this method replaces the
