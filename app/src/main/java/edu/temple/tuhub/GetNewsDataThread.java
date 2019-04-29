@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import edu.temple.tuhub.models.Newsitem;
 
@@ -32,6 +33,11 @@ class GetNewsDataThread extends Thread {
         try {
             JSONArray entries;
             entries=(JSONArray)newsJSON.get("entries");
+            System.out.println(newsJSON.length());
+            for (Iterator<String> it = newsJSON.keys(); it.hasNext(); ) {
+                String key = it.next();
+                System.out.println(key);
+            }
             SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             SimpleDateFormat destFormat = new SimpleDateFormat("MMM d, yyyy hh:mm:ss a"); //here 'a' for AM/PM
 
@@ -48,7 +54,7 @@ class GetNewsDataThread extends Thread {
                 String tmptitle;
                 String tmpimageurl;
                 String tmpcontent;
-                String tmpsubtitle;
+                String tmpsubtitle = new String();
                 String tmpnewsurl;
 
                 String html1= "<!DOCTYPE html>" +
@@ -73,15 +79,28 @@ class GetNewsDataThread extends Thread {
                 pow.setNewsDate(formattedDate);//Setting the formated date
                 tmptitle = (String)tmp.get("title");
                 pow.setNewstitle(tmptitle);
-                tmpnewsurl=(String)((JSONArray)tmp.get("link")).get(0);
-                pow.setNewsurl(tmpnewsurl);
+                try {
+                    tmpnewsurl = (String) ((JSONArray) tmp.get("link")).get(0);
+                    pow.setNewsurl(tmpnewsurl);
+                }
+                catch(Exception e){
+                    System.out.println(e.getMessage());
+            }
+
                 tmpimageurl = (String) tmp.get("logo");
                 pow.setNewsImageLink(tmpimageurl);
                 tmpcontent = html1 + tmp.get("content") + html2;
                 tmpcontent=tmpcontent.replaceAll("u002f","");//replaces the weird u002f in some tags with nothing
                 pow.setNewscontent(tmpcontent);
-                tmpsubtitle = tmpcontent.substring(tmpcontent.indexOf(">",tmpcontent.indexOf("<p"))+1,tmpcontent.indexOf("</p>",tmpcontent.indexOf(">",tmpcontent.indexOf("<p"))));//tries to obtain substring composed of the subtitle within the html content code. Uses knowledge of how the html is structured.
-                tmpsubtitle=tmpsubtitle.replaceAll("<.+?>","");//takes out all the brace tags using regular expressions http://www.regular-expressions.info/repeat.html
+                try {
+                    tmpsubtitle = tmpcontent.substring(tmpcontent.indexOf(">", tmpcontent.indexOf("<p")) + 1, tmpcontent.indexOf("</p>", tmpcontent.indexOf(">", tmpcontent.indexOf("<p"))));//tries to obtain substring composed of the subtitle within the html content code. Uses knowledge of how the html is structured.
+                    tmpsubtitle=tmpsubtitle.replaceAll("<.+?>","");//takes out all the brace tags using regular expressions http://www.regular-expressions.info/repeat.html
+
+                }
+                catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
                 if(tmpsubtitle.length()>120)
                 {
 
